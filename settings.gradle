@@ -1,0 +1,4 @@
+rootProject.name = 'Viola'
+
+
+enableFeaturePreview('GRADLE_METADATA')
