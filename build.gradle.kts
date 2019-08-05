@@ -12,6 +12,7 @@ repositories {
 
 plugins {
     kotlin("multiplatform") version "1.3.31"
+    `maven-publish`
 }
 
 group = "site.hackery"
@@ -46,5 +47,12 @@ kotlin {
                 implementation(kotlin("test-junit"))
             }
         }
+    }
+}
+
+
+publishing {
+    repositories {
+        maven("$buildDir/repo")
     }
 }

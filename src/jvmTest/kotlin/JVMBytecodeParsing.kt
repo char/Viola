@@ -106,8 +106,5 @@ class JVMBytecodeParsing {
                     interfaces
             )
         }
-
-        val (result) = ClassFileParser().classFile(ByteArrayInputState(classBuffer))
-        println(result)
     }
 }
