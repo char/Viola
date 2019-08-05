@@ -11,8 +11,8 @@ inline infix fun <I, A, B> Parser<I, A>.then(crossinline other: Parser<I, B>) = 
     result(Pair(valueA, valueB), nextB)
 }
 
-inline infix fun <I, A, B> Parser<I, A>.thenL(crossinline other: Parser<I, B>) = (this then other) map { it?.first }
-inline infix fun <I, A, B> Parser<I, A>.thenR(crossinline other: Parser<I, B>) = (this then other) map { it?.second }
+inline infix fun <I, A, B> Parser<I, A>.thenL(crossinline other: Parser<I, B>) = (this then other) map { it.first }
+inline infix fun <I, A, B> Parser<I, A>.thenR(crossinline other: Parser<I, B>) = (this then other) map { it.second }
 
 fun <I> parserSequence(vararg parsers: Parser<I, *>) = parser<I, List<Any>> { input ->
     val list = mutableListOf<Any>()
