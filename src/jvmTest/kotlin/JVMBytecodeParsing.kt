@@ -7,9 +7,6 @@ import java.io.DataInputStream
 import java.io.DataOutputStream
 
 
-// Data
-class ClassFileVersions(val major: Int, val minor: Int)
-
 sealed class ConstantPoolEntry
 
 class ConstantPoolUTF(val value: String) : ConstantPoolEntry()
@@ -51,7 +48,6 @@ class JVMBytecodeParsing {
             }
 
             val magic = byteSignature("CA FE BA BE")
-            val versions = uint16 then uint16 map { (minor, major) -> ClassFileVersions(major, minor) }
 
             val constantPoolEntry = anyByte() thenUseR { tag ->
                 when (tag.toInt()) {
@@ -97,18 +93,16 @@ class JVMBytecodeParsing {
             } // TODO
 
             val constantPool = uint16 thenUseR { n -> parserSequence(*Array(n - 1, { constantPoolEntry })) }
-            
-            val access = uint16
-
             val interfaces = uint16 thenUseR { n -> parserSequence(*Array(n, { uint16 })) }
 
             val classFile = parserSequence(
                     magic,
-                    versions,
+                    uint16, // minor_version
+                    uint16, // major_version
                     constantPool,
-                    access,
-                    uint16,
-                    uint16,
+                    uint16, // access
+                    uint16, // this_class
+                    uint16, // super_class
                     interfaces
             )
         }
