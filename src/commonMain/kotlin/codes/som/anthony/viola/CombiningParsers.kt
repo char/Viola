@@ -13,6 +13,20 @@ inline infix fun <I, A, B> Parser<I, A>.then(crossinline other: Parser<I, B>) = 
 inline infix fun <I, A, B> Parser<I, A>.thenL(crossinline other: Parser<I, B>) = (this then other) map { it.first }
 inline infix fun <I, A, B> Parser<I, A>.thenR(crossinline other: Parser<I, B>) = (this then other) map { it.second }
 
+inline infix fun <I, A, B> Parser<I, A>.thenUse(crossinline parserGenerator: (A) -> Parser<I, B>) = parser<I, Pair<A, B>> { input ->
+    val (valueA, nextA) = this(input)
+    if (valueA == null || nextA == null) return@parser result(null, input)
+
+    val parserB = parserGenerator(valueA)
+
+    val (valueB, nextB) = parserB(nextA)
+    if (valueB == null) return@parser result(null, input)
+
+    result(Pair(valueA, valueB), nextB)
+}
+
+inline infix fun <I, A, B> Parser<I, A>.thenUseR(crossinline parserGenerator: (A) -> Parser<I, B>) = (this thenUse parserGenerator) map { it.second }
+
 inline infix fun <I, T> Parser<I, T>.or(crossinline other: Parser<I, T>) = parser<I, T> { input ->
     val (valueA, nextA) = this(input)
     if (valueA != null) return@parser result(valueA, nextA)

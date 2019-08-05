@@ -13,15 +13,12 @@ class BasicTests {
     fun parseThreeNumberSequence() {
         val anyInteger = ((char('+') or char('-')).optional then charIn('0' .. '9').repeat.asString) map
                 { (sign, num) -> (sign.map(Char::toString).or("") + num).toInt() }
-
-        val separator = char(',') thenL char(' ').optionalRepeat
-
-        val numberEntry = anyInteger thenL separator
+        val separator = (char(',') or char(' ')) thenL char(' ').optionalRepeat
 
         val parser = parserSequence(
-                numberEntry,
-                numberEntry,
-                anyInteger
+                anyInteger thenL separator,
+                anyInteger thenL separator,
+                anyInteger thenL separator
         )
 
         val result = parser(StringInputState("128, +96, -32")).value

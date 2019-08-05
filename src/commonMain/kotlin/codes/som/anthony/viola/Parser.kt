@@ -8,3 +8,5 @@ inline fun <I, T> parser(noinline parser: Parser<I, T>): Parser<I, T> = parser
 
 inline fun <I, T> result(value: T?, input: InputState<I>?) =
     Result(value, input)
+
+fun <I> reject() = parser { input: InputState<I> -> result(null, input) }
