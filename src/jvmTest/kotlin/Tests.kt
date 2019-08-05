@@ -2,14 +2,32 @@ import codes.som.anthony.viola.*
 import codes.som.anthony.viola.binary.ByteArrayInputState
 import codes.som.anthony.viola.binary.anyByte
 import codes.som.anthony.viola.binary.byteSignature
-import codes.som.anthony.viola.charseq.StringInputState
-import codes.som.anthony.viola.charseq.char
-import codes.som.anthony.viola.charseq.str
+import codes.som.anthony.viola.charseq.*
+import java.io.File.separator
 import java.io.InputStream
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class BasicTests {
+    @Test
+    fun parseThreeNumberSequence() {
+        val anyInteger = ((char('+') or char('-')).optional then charIn('0' .. '9').repeat.asString) map
+                { (sign, num) -> (sign.map(Char::toString).or("") + num).toInt() }
+
+        val separator = char(',') thenL char(' ').optionalRepeat
+
+        val numberEntry = anyInteger thenL separator
+
+        val parser = parserSequence(
+                numberEntry,
+                numberEntry,
+                anyInteger
+        )
+
+        val result = parser(StringInputState("128, +96, -32")).value
+        assertEquals(listOf(128, 96, -32), result)
+    }
+
     @Test
     fun parseHelloWorld() {
         val helloWorldParser = str("Hello") thenL char(' ') then str("world!")

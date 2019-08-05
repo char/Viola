@@ -22,7 +22,4 @@ fun byteSignature(descriptor: String) =
                 "??" -> anyByte()
                 else -> byte(it.toShort(16).toByte())
             }
-        }.toTypedArray()) map {
-            @Suppress("UNCHECKED_CAST")
-            (it as List<Byte>).toByteArray()
-        }
+        }.toTypedArray()) map { it.toByteArray() }

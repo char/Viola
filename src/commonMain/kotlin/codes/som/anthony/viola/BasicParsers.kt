@@ -8,9 +8,9 @@ inline fun <I, T> Parser<I, T>.andSatisfy(crossinline predicate: (T) -> Boolean)
     else result
 }
 
-val <I, T> Parser<I, T>.optional get() = parser<I, Nullable<T>> { input ->
+val <I, T> Parser<I, T>.optional get() = parser<I, Maybe<T>> { input ->
     val (value, next) = this.invoke(input)
-    result(Nullable(value), next)
+    result(Maybe(value), next)
 }
 
 val <I, T> Parser<I, T>.optionalRepeat get() = parser<I, List<T>> { input ->

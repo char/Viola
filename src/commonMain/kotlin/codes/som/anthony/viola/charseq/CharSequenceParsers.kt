@@ -32,3 +32,6 @@ fun charIn(s: String) =
 
 fun charIn(range: CharRange) =
         anyChar().andSatisfy { it in range }
+
+val Parser<Char, Iterable<Char>>.asString
+    get() = this map { it.joinToString("") }
