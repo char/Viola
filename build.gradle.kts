@@ -15,7 +15,7 @@ plugins {
     `maven-publish`
 }
 
-group = "site.hackery"
+group = "codes.som.anthony"
 version = "0.0.1"
 
 kotlin {
