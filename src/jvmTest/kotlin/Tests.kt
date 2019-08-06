@@ -10,6 +10,15 @@ import kotlin.test.assertEquals
 
 class BasicTests {
     @Test
+    fun parseUsingNot() {
+        val parser = not(char('+')).repeat.asString
+
+        val (result, input) = parser(StringInputState("---"))
+        assertEquals("---", result)
+        assertEquals(null, input)
+    }
+
+    @Test
     fun parseThreeNumberSequence() {
         val anyInteger = ((char('+') or char('-')).optional then charIn('0' .. '9').repeat.asString) map
                 { (sign, num) -> (sign.map(Char::toString).or("") + num).toInt() }

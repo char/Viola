@@ -37,6 +37,14 @@ inline infix fun <I, T> Parser<I, T>.or(crossinline other: Parser<I, T>) = parse
     return@parser result(null, input)
 }
 
+inline fun <I, T> not(crossinline parser: Parser<I, T>) = parser<I, I> { input ->
+    val (value, _) = parser(input)
+    if (value != null) return@parser result(null, input)
+
+    val (result, next) = input.advance()
+    result(result, next)
+}
+
 fun <I, R> parserSequence(vararg parsers: Parser<I, out R>) = parser<I, List<R>> { input ->
     val list = mutableListOf<R>()
 
